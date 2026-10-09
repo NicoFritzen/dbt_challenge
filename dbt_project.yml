@@ -1,0 +1,52 @@
+name: clube_valor
+version: "1.0.0"
+config-version: 2
+
+profile: clube_valor
+
+model-paths: ["models"]
+seed-paths: ["data_raw"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  clube_valor:
+    +persist_docs:
+      relation: true
+      columns: true
+    staging:
+      +schema: staging
+      +materialized: view
+    intermediate:
+      +schema: intermediate
+      +materialized: view
+    marts:
+      +schema: marts
+      +materialized: table
+    audits:
+      +schema: audits
+      +materialized: table
+
+seeds:
+  clube_valor:
+    +quote_columns: false
+    clients:
+      +column_types:
+        client_id: varchar
+        name: varchar
+        city: varchar
+        state: varchar
+        created_at: date
+    transactions:
+      +column_types:
+        transaction_id: varchar
+        client_id: varchar
+        asset_ticker: varchar
+        operation: varchar
+        quantity: decimal(18, 4)
+        unit_price: decimal(18, 4)
+        transaction_date: date
